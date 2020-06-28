@@ -2,7 +2,13 @@
 import os
 import time
 import sys
+import signal
 
+
+def handler(*_): 
+    exit(print("\nstopped watching the file"))
+
+signal.signal(signal.SIGINT, handler)
 
 def main(filename):
     if filename == "":
