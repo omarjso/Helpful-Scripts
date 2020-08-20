@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import subprocess
 import os
 import time
 import sys
@@ -17,16 +18,15 @@ def main(filename):
 
     lastMod = os.stat(filename).st_mtime
     while True:
-        time.sleep(1)
-
         # Sometimes after saving a file the system needs time to
         # recognize the new file leading it to believe that it doesn't
         # exist. This try, except catches that.
         try: 
             newTime = os.stat(filename).st_mtime 
-            if newTime > lastMod:
-                os.system(command)
+            if newTime - lastMod > 0.1:
+                p = subprocess.run(command.split())
                 lastMod = newTime
+
         except FileNotFoundError:
             continue
 
