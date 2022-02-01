@@ -15,7 +15,7 @@ def addBashAlias(class_code, class_path):
 
 def className():
     clsName = input("What class do you want to add? ")
-    while not re.match(r"^\w{3,7}\d{3}$", clsName):
+    while not re.match(r"^\w{2,7}\d{3}$", clsName):
         print("please write the class in the form CodeNumber")
         clsName = input("What class do you want to add? ")
     return clsName
