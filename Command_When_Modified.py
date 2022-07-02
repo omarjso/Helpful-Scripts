@@ -4,7 +4,7 @@ import os
 import time
 import sys
 import signal
-
+FILE_SHORTHAND = "$F"
 
 def handler(*_): 
     exit(print("\nstopped watching the file"))
@@ -15,6 +15,8 @@ def main(filename):
     if filename == "":
         filename = input("Name of the watched file: ")
     command = input("Command to excute on file: ")
+    command = command.replace(FILE_SHORTHAND, filename)
+    command = command.split()
 
     lastMod = os.stat(filename).st_mtime
     while True:
@@ -24,7 +26,7 @@ def main(filename):
         try: 
             newTime = os.stat(filename).st_mtime 
             if newTime - lastMod > 0.1:
-                p = subprocess.run(command.split())
+                p = subprocess.run(command)
                 lastMod = newTime
 
         except FileNotFoundError:
