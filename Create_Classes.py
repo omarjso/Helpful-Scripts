@@ -3,8 +3,8 @@ import os
 import sys
 import re
 
-CLASSES_DIR = "{}/Documents/UWcourses".format(os.path.expanduser("~"))
 CLASS_ALIASES = "{}/.aliases/.classes".format(os.path.expanduser("~"))
+UNIS = ["UW", "KAUST"]
 
 def addBashAlias(class_code, class_path):
     code = class_code.split("-")[0]
@@ -18,7 +18,12 @@ def className():
     while not re.match(r"^\w{2,7}\d{3}$", clsName):
         print("please write the class in the form CodeNumber")
         clsName = input("What class do you want to add? ")
-    return clsName
+
+    uniName = input("What university is this class in? " + str(UNIS))
+    while not uniName in UNIS:
+        print("Choose a university from the listed universities")
+        uniName = input("What university is this class in? " + str(UNIS))
+    return clsName, uniName
 
 
 def classCode(cls):
@@ -30,7 +35,8 @@ def classCode(cls):
     return "{}-{}".format(cls, term)
 
 
-def createClassDir(code):
+def createClassDir(code, uni):
+    CLASSES_DIR = "{}/Documents/{}/Courses".format(os.path.expanduser("~"), uni)
     group_path = "{}/{}".format(CLASSES_DIR, re.split(r"\d", code)[0])
     if not os.path.isdir(group_path):
         os.makedirs(group_path)
@@ -49,9 +55,9 @@ def main(argv):
     if not argv:
         argv = [className()]
 
-    for cls in argv:
+    for cls, uni in argv:
         class_code = classCode(cls)
-        class_path = createClassDir(class_code)
+        class_path = createClassDir(class_code, uni)
         addBashAlias(class_code, class_path)
 
     print("classes are added!")
