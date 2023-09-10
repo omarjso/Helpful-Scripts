@@ -19,7 +19,7 @@ def className():
         print("please write the class in the form CodeNumber")
         clsName = input("What class do you want to add? ")
 
-    uniName = input("What university is this class in? " + str(UNIS))
+    uniName = input(f"What university is this class in? {UNIS} ")
     while not uniName in UNIS:
         print("Choose a university from the listed universities")
         uniName = input(f"What university is this class in? {UNIS} ")
