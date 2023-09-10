@@ -5,6 +5,7 @@ import time
 import sys
 import signal
 FILE_SHORTHAND = "$F"
+SECONDS_THRESH = 0.5
 
 def handler(*_): 
     exit(print("\nstopped watching the file"))
@@ -20,12 +21,13 @@ def main(filename):
 
     lastMod = os.stat(filename).st_mtime
     while True:
+        time.sleep(SECONDS_THRESH)
         # Sometimes after saving a file the system needs time to
         # recognize the new file leading it to believe that it doesn't
         # exist. This try, except catches that.
         try: 
             newTime = os.stat(filename).st_mtime 
-            if newTime - lastMod > 0.1:
+            if newTime - lastMod > SECONDS_THRESH:
                 p = subprocess.run(command)
                 lastMod = newTime
 
