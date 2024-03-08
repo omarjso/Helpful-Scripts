@@ -6,6 +6,7 @@ import sys
 import signal
 FILE_SHORTHAND = "$F"
 SECONDS_THRESH = 0.5
+TIMEOUT = 3600
 
 def handler(*_): 
     exit(print("\nstopped watching the file"))
@@ -20,8 +21,14 @@ def main(filename):
     command = command.split()
 
     lastMod = os.stat(filename).st_mtime
+    lastCheck = time.time()
+
     while True:
         time.sleep(SECONDS_THRESH)
+        currentTime = time.time()
+        if currentTime - lastCheck > TIMEOUT:
+            print("No updates for an hour. Exiting.")
+            break
         # Sometimes after saving a file the system needs time to
         # recognize the new file leading it to believe that it doesn't
         # exist. This try, except catches that.
@@ -30,6 +37,7 @@ def main(filename):
             if newTime - lastMod > SECONDS_THRESH:
                 p = subprocess.run(command)
                 lastMod = newTime
+                lastCheck = time.time()
 
         except FileNotFoundError:
             continue
