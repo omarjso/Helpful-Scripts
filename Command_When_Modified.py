@@ -16,8 +16,9 @@ signal.signal(signal.SIGINT, handler)
 def main(filename):
     if filename == "":
         filename = input("Name of the watched file: ")
-    command = input("Command to excute on file: ")
-    command = command.replace(FILE_SHORTHAND, filename)
+    command = input("Command to excute on file (Tip: $F as filename): ")
+    if FILE_SHORTHAND in filename:
+        command = command.replace(FILE_SHORTHAND, filename)
     command = command.split()
 
     lastMod = os.stat(filename).st_mtime
